@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  PhotoCollectionViewCell.h
 //  MasterData_Task
 //
 //  Created by Евгений on 15.12.15.
@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface PhotoCollectionViewCell : UICollectionViewCell
+@property (strong, nonatomic) IBOutlet UIImageView *photoImageView;
 
 @end
-
