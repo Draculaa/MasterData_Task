@@ -10,4 +10,6 @@
 
 @interface PhotoCollectionViewController : UICollectionViewController
 
+@property (strong, nonatomic) UIRefreshControl * refreshControl;
+
 @end

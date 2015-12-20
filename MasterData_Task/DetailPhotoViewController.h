@@ -15,5 +15,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *captionLabel;
 @property (strong, nonatomic) IBOutlet UILabel *countlikesLabel;
+@property (strong, nonatomic) IBOutlet NSString *mediaId;
+@property (strong, nonatomic) IBOutlet UIImageView *heartImageView;
+@property (strong, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end

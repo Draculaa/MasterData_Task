@@ -102,7 +102,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_red" translatesAutoresizingMaskIntoConstraints="NO" id="uPv-dk-Y4l">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heart_grey" translatesAutoresizingMaskIntoConstraints="NO" id="uPv-dk-Y4l">
                                 <rect key="frame" x="8" y="471" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="CIr-Gs-6bk"/>
@@ -125,7 +125,7 @@
                                 <rect key="frame" x="0.0" y="64" width="320" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="St9-xL-L5e">
-                                        <rect key="frame" x="58" y="14" width="254" height="21"/>
+                                        <rect key="frame" x="58" y="14" width="204" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.24705882352941178" green="0.44705882352941173" blue="0.6470588235294118" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -142,11 +142,24 @@
                                             </mask>
                                         </variation>
                                     </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XtP-WL-CmS">
+                                        <rect key="frame" x="270" y="14" width="42" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="Qrd-ca-cyc"/>
+                                            <constraint firstAttribute="width" constant="42" id="cyH-jp-xtw"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.98823529409999999" green="1" blue="0.98823529409999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="XtP-WL-CmS" firstAttribute="leading" secondItem="St9-xL-L5e" secondAttribute="trailing" constant="8" id="1T3-Pl-tN8"/>
+                                    <constraint firstAttribute="trailing" secondItem="XtP-WL-CmS" secondAttribute="trailing" constant="8" id="46g-Go-wiw"/>
                                     <constraint firstItem="UWN-eg-Chv" firstAttribute="top" secondItem="oYY-iM-cyM" secondAttribute="top" id="AyQ-RS-R1X"/>
                                     <constraint firstItem="St9-xL-L5e" firstAttribute="leading" secondItem="oYY-iM-cyM" secondAttribute="leading" constant="8" id="C8Y-bH-76h"/>
+                                    <constraint firstItem="XtP-WL-CmS" firstAttribute="baseline" secondItem="St9-xL-L5e" secondAttribute="baseline" id="E2g-Ob-lMX"/>
                                     <constraint firstItem="St9-xL-L5e" firstAttribute="leading" secondItem="UWN-eg-Chv" secondAttribute="trailing" constant="8" id="Sox-ru-wKy"/>
                                     <constraint firstItem="UWN-eg-Chv" firstAttribute="leading" secondItem="oYY-iM-cyM" secondAttribute="leading" id="bef-cf-TnL"/>
                                     <constraint firstItem="UWN-eg-Chv" firstAttribute="leading" secondItem="oYY-iM-cyM" secondAttribute="leading" id="c9Y-jg-Hr5"/>
@@ -159,6 +172,7 @@
                                     <mask key="constraints">
                                         <exclude reference="c9Y-jg-Hr5"/>
                                         <exclude reference="C8Y-bH-76h"/>
+                                        <exclude reference="qIM-hN-O74"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -243,7 +257,9 @@
                         <outlet property="avatarImageView" destination="UWN-eg-Chv" id="xzd-ky-xnL"/>
                         <outlet property="captionLabel" destination="q5p-FP-KSj" id="X68-mE-5rf"/>
                         <outlet property="countlikesLabel" destination="PId-Km-eeX" id="tzC-UB-M9j"/>
+                        <outlet property="heartImageView" destination="uPv-dk-Y4l" id="8bv-Ph-aBT"/>
                         <outlet property="photoImageView" destination="dIk-jr-E6O" id="lK7-6b-WuP"/>
+                        <outlet property="timeLabel" destination="XtP-WL-CmS" id="h6y-PG-4CO"/>
                         <outlet property="usernameLabel" destination="St9-xL-L5e" id="PEh-hX-9ag"/>
                     </connections>
                 </viewController>
@@ -254,6 +270,6 @@
     </scenes>
     <resources>
         <image name="No-image-found" width="275" height="275"/>
-        <image name="heart_red" width="128" height="128"/>
+        <image name="heart_grey" width="128" height="128"/>
     </resources>
 </document>

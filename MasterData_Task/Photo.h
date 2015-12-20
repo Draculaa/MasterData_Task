@@ -12,6 +12,15 @@
 
 @property (strong, nonatomic) NSURL * url;
 @property NSInteger likesCount;
-@property (strong, nonatomic) NSString * comment;
+@property (strong, nonatomic) NSString * caption;
+@property BOOL userHasLiked;
+@property (strong, nonatomic) NSString * mediaId;
+@property (strong, nonatomic) NSString * userName;
+@property (strong, nonatomic) NSString * stringTime;
+@property (strong, nonatomic) NSURL * profilePictureUrl;
+
+//- (instancetype)initWithMediaId: (NSString *) mediaId andURL: (NSURL *) url;
+- (instancetype)initPreviewWithServerResponse: (NSDictionary *)responseObject;
+- (instancetype)initDetailWithServerResponse: (NSDictionary *)responseObject;
 
 @end

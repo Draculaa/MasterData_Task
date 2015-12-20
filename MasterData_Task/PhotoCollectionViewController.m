@@ -8,11 +8,19 @@
 
 #import "PhotoCollectionViewController.h"
 #import "PhotoCollectionViewCell.h"
+#import "DetailPhotoViewController.h"
 #import "Photo.h"
+#import <SimpleAuth.h>
+#import <AFNetworking/AFNetworking.h>
+#import <UIImageView+AFNetworking.h>
+#import "ServerManager.h"
 
 @interface PhotoCollectionViewController ()
 
 @property (strong, nonatomic) NSMutableArray * objects;
+@property (strong, nonatomic) NSString * accesToken;
+@property (strong, nonatomic) NSString * userId;
+@property BOOL loadingMoreData;
 
 @end
 
@@ -24,27 +32,102 @@ const CGFloat heightAdjustment = 30.0;
 
 static NSString * const reuseIdentifier = @"FeedPhotoCell";
 
+-(instancetype)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.objects = [NSMutableArray new];
+        self.loadingMoreData = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     //[self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     CGFloat width = (CGRectGetWidth(self.collectionView.frame) - paddings)/numberOfItemsPerRow;
     UICollectionViewFlowLayout * layout = (UICollectionViewFlowLayout *)self.collectionViewLayout;
     layout.itemSize = CGSizeMake(width, width + heightAdjustment);
+//    self.refreshControl = [[UIRefreshControl alloc] init];
+//    self.refreshControl.backgroundColor = [UIColor whiteColor];
+//    self.refreshControl.tintColor = [UIColor grayColor];
+//    [self.refreshControl addTarget:self
+//                            action:@selector(getLatestLoads)
+//                  forControlEvents:UIControlEventValueChanged];
+//    [self.collectionView addSubview:self.refreshControl];
+    
+    [self authInstagram];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height)
+    {
+        if (!self.loadingMoreData && self.accesToken)
+        {
+            [self getFeed];
+        }
+    }
+}
+
+//-(void)getLatestLoads{
+//    [self.refreshControl beginRefreshing];
+//    [self getFeed];
+//    [self.refreshControl endRefreshing];
+//}
+
+- (void)authInstagram{
+    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString * token = [userDefaults objectForKey:@"accesToken"];
+    if (token) {
+        self.accesToken = token;
+        self.userId = [userDefaults objectForKey:@"userID"];
+        [self getFeed];
+    }else{
+        [SimpleAuth authorize:@"instagram"
+                   completion:^(id responseObject, NSError *error) {
+                       NSLog(@"%@", responseObject);
+                       NSDictionary * credentials = responseObject[@"credentials"];
+                       NSString * accessToken = credentials[@"token"];
+                       NSString * userID = responseObject[@"uid"];
+                       
+                       [userDefaults setObject:accessToken
+                                        forKey:@"accesToken"];
+                       [userDefaults setObject:userID
+                                        forKey:@"userID"];
+                       self.accesToken = accessToken;
+                       self.userId = userID;
+                       [self getFeed];
+                   }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-/*
+- (void)getFeed{
+    self.loadingMoreData = YES;
+    __weak typeof(self) wSelf = self;
+    [[ServerManager sharedManager] getFeedOnSuccess:^(NSArray *photos) {
+        [wSelf.objects addObjectsFromArray:photos];
+        [wSelf.collectionView reloadData];
+         wSelf.loadingMoreData = NO;
+    } onFailure:^(NSError *error, NSInteger *statusCode) {
+        NSLog(@"ERROR: %@", [error localizedDescription]);
+    }];
+}
+
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    PhotoCollectionViewCell * cell = (PhotoCollectionViewCell *)sender;
+    NSIndexPath * indexPath = [self.collectionView indexPathForCell:cell];
+    DetailPhotoViewController * controller = [segue destinationViewController];
+    Photo * photo = [self.objects objectAtIndex:indexPath.row];
+    controller.mediaId = photo.mediaId;
 }
-*/
+
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -55,7 +138,7 @@ static NSString * const reuseIdentifier = @"FeedPhotoCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     //return self.objects.count;
-    return 10;
+    return [self.objects count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -63,8 +146,9 @@ static NSString * const reuseIdentifier = @"FeedPhotoCell";
     if (!cell) {
         cell = [[PhotoCollectionViewCell alloc] init];
     }
-    cell.photoImageView.image = [UIImage imageNamed:@"No-image-found"];
-    
+    Photo * photo = (Photo *)[self.objects objectAtIndex:indexPath.row];
+    [cell.photoImageView setImageWithURL:photo.url
+                        placeholderImage:[UIImage imageNamed:@"No-image-found"]];
     return cell;
 }
 
